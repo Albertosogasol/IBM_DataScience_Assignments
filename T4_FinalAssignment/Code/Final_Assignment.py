@@ -38,7 +38,18 @@ for table in tables:
     else:
         continue
 tesla_revenue.head()
+
+
+# Se eliminan las comas y los simbolos de dolar
+tesla_revenue["Revenue"] = tesla_revenue['Revenue'].str.replace(r',|\$',"", regex=True)
+
+# Se eliminan los valores nulos de la tabla
+tesla_revenue.dropna(inplace=True)
+tesla_revenue = tesla_revenue[tesla_revenue['Revenue'] != ""]
+
+# Se imprime por pantalla
 print(tesla_revenue)
+
 
 ################# Con Pandas
 tesla_read_html_pandas = pd.read_html(url)

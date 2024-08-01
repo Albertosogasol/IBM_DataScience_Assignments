@@ -13,9 +13,9 @@ tesla_data.reset_index(inplace=True)
 #print(tesla_data.head())
 
 url = "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0220EN-SkillsNetwork/labs/project/revenue.htm"
-html_data = requests.get(url)
+html_data = requests.get(url).text
 
-soup = BeautifulSoup(html_data.content, 'html.parser')
+soup = BeautifulSoup(html_data, 'html.parser')
 
 # Find all tables on the page
 tables = soup.find_all('table')
@@ -61,7 +61,43 @@ tesla_revenue.head()
 
 game_stop = yf.Ticker("GME")
 
-game_stop_data = game_stop.history(period="max")
-game_stop_data.reset_index(inplace=True)
-game_stop_data.head()
-print(game_stop_data.head())
+gme_data = game_stop.history(period="max")
+gme_data.reset_index(inplace=True)
+gme_data.head()
+print(gme_data.head())
+
+# Question 4
+
+# Set the url
+url = "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0220EN-SkillsNetwork/labs/project/stock.html"
+
+# HTML code
+html_data_2 = requests.get(url).text
+
+beautiful_soup = BeautifulSoup(html_data_2, 'html.parser')
+
+# Create an empty DataFrame
+gme_revenue = pd.DataFrame(columns=["Date", "Revenue"])
+
+# Find all tables in HTML
+tables = beautiful_soup.find_all('table')
+
+# Locate the needed table
+for table in tables:
+    # Check if correct table
+    if "Quarterly" in table.get_text():
+        for row in table.find('tbody').find_all('tr'):
+            col = row.find_all('td')
+            date = col[0].text
+            revenue = col[1].text
+
+            # Append the data of each row to the table
+            gme_revenue = pd.concat([gme_revenue,pd.DataFrame({"Date":[date],"Revenue":[revenue]})], ignore_index=True)
+    else:
+        # Next table
+        continue
+
+gme_revenue.head()
+print("\n")
+print("\n")
+print(f"Los datos de GameStop son: \n \n {gme_revenue}")

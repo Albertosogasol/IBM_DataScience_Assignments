@@ -56,3 +56,12 @@ tesla_read_html_pandas = pd.read_html(url)
 tesla_revenue = tesla_read_html_pandas[1]
 tesla_revenue.columns = ['Date','Revenue (MIllions of US $)']
 tesla_revenue.head()
+
+# Question 3
+
+game_stop = yf.Ticker("GME")
+
+game_stop_data = game_stop.history(period="max")
+game_stop_data.reset_index(inplace=True)
+game_stop_data.head()
+print(game_stop_data.head())

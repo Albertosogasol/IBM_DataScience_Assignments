@@ -121,3 +121,14 @@ print(f"Los datos de GameStop son: \n \n {gme_revenue}")
 
 # Question 5 (not working on Console)
 make_graph(tesla_data, tesla_revenue, 'Tesla')
+
+# Question 6 (not working on Console)
+# Delete commas and dollar symbols
+
+gme_revenue["Revenue"] = gme_revenue['Revenue'].str.replace(r',|\$',"", regex=True)
+gme_revenue.dropna(inplace=True)
+
+gme_revenue = gme_revenue[gme_revenue['Revenue'] != ""]
+
+# Graph
+make_graph(gme_data, gme_revenue, 'GameStop')
